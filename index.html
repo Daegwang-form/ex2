@@ -446,7 +446,7 @@
 <script>
   const programs = {
     beauty: [
-      { date: '5월 16일 (토)', title: '내 취향 100% 나만의 네일 팁 만들기' },
+      { date: '5월 16일 (토)', title: '내 취향 100% 나만의 네일 팁 만들기', closed: true },
       { date: '6월 13일 (토)', title: '나만의 색을 찾아보자 (퍼스널컬러 진단 등)' },
     ],
     design: [
@@ -462,11 +462,16 @@
     if (!programs[val]) { section.style.display = 'none'; return; }
     
     programs[val].forEach((p, i) => {
+      // 마감 여부에 따른 속성 설정
+      const isDisabled = p.closed ? 'disabled' : '';
+      const closedClass = p.closed ? 'style="opacity: 0.6; cursor: not-allowed;"' : '';
+      const closedText = p.closed ? '<span style="color: #ff4d4f; font-weight: bold;"> (마감)</span>' : '';
+
       container.innerHTML += `
-        <label class="program-option">
-          <input type="radio" name="program" value="${p.date} ${p.title}">
+        <label class="program-option" ${closedClass}>
+          <input type="radio" name="program" value="${p.date} ${p.title}" ${isDisabled}>
           <span class="program-btn">
-            <div class="program-date">${p.date}</div>
+            <div class="program-date">${p.date}${closedText}</div>
             <div class="program-title">${p.title}</div>
           </span>
         </label>`;
