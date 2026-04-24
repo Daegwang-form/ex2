@@ -11,8 +11,6 @@
             --pass-green: #44bd32;
             --confirm-yellow: #ffc233;
             --bg-blue: #8faefc;
-            --text-dark: #333;
-            --text-grey: #666;
         }
 
         body {
@@ -34,7 +32,7 @@
         h1 { color: var(--main-purple); font-weight: 800; margin-bottom: 30px; font-size: 1.8rem; }
         
         .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-size: 0.9rem; font-weight: 700; color: var(--text-dark); margin-left: 10px; }
+        label { font-size: 0.9rem; font-weight: 700; color: #666; margin-left: 10px; }
         input {
             width: 100%; padding: 18px; margin-top: 8px;
             border: 2px solid #eee; border-radius: 25px;
@@ -51,30 +49,29 @@
         .confirm-btn { background: var(--confirm-yellow); color: white; margin-top: 30px; box-shadow: 0 5px 15px rgba(255,194,51,0.3); }
 
         #result-section { display: none; animation: fadeIn 0.5s; }
-        .result-icon { width: 130px; height: auto; margin-bottom: 10px; }
-        .status-msg { font-size: 1.6rem; font-weight: 800; color: var(--text-dark); margin: 15px 0; line-height: 1.4; }
+        .emoji-img { width: 120px; margin-bottom: 10px; }
+        .status-msg { font-size: 1.5rem; font-weight: 800; color: #333; margin: 15px 0; line-height: 1.4; }
         .dept-badge {
             display: inline-block; padding: 12px 35px;
             background: var(--pass-green); color: white;
             border-radius: 50px; font-weight: 700; font-size: 1.2rem; margin: 10px 0;
         }
-        .info-text { color: var(--text-grey); font-size: 0.95rem; margin-top: 20px; line-height: 1.6; }
+        .info-text { color: #888; font-size: 0.9rem; margin-top: 20px; line-height: 1.5; }
         .loading { display: none; color: var(--main-purple); font-weight: 700; margin-top: 15px; }
 
-        /* 애니메이션 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fly {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-15px) rotate(8deg); }
         }
-        .fly-icon { display: inline-block; font-size: 5.5rem; margin-bottom: 15px; animation: fly 2.5s infinite ease-in-out; }
+        .fly-icon { display: inline-block; font-size: 5.5rem; margin-bottom: 10px; animation: fly 2.5s infinite ease-in-out; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="login-section">
-        <h1>합격자 조회🏫</h1>
+        <h1>합격자 조회</h1>
         <div class="input-group">
             <label>이름</label>
             <input type="text" id="userName" placeholder="이름을 입력하세요">
@@ -94,6 +91,7 @@
 </div>
 
 <script>
+    // 여기에 본인의 최신 배포 URL을 넣어주세요!
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec";
 
     async function checkPass() {
@@ -102,7 +100,7 @@
         const loader = document.getElementById('loader');
 
         if(!name || birth.length !== 8) {
-            alert("이름과 생년월일 8자리를 정확히 입력해주세요! 😊");
+            alert("이름과 생년월일 8자리를 입력해주세요! 😊");
             return;
         }
 
@@ -116,7 +114,8 @@
             const data = await response.json();
             displayResult(data, name);
         } catch (error) {
-            alert("연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            alert("연결 오류가 발생했습니다. 다시 시도해주세요.");
+            console.error(error);
         } finally {
             loader.style.display = "none";
         }
@@ -132,191 +131,36 @@
 
         if(data.status === "success") {
             if(data.pass === true) {
-                // [합격 시 수정]: 고화질 정지 이미지(PNG)를 사용하여 모바일 안정성 확보
-                // 축포가 화려하게 터진 순간의 이미지입니다.
-                const staticImageUrl = "https://i.imgur.com/8QG3U2W.png"; // 화려하게 터진 축포 PNG 이미지
-                
+                // 합격 시: 정지된 축포 이미지 (가장 안정적)
                 content.innerHTML = `
-                    <div style="height: 140px; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
-                        <img src="${staticImageUrl}" class="result-icon" alt="축하 폭죽">
-                    </div>
-                    <div class="status-msg">합격을 축하합니다!🎉</div>
+                    <div style="font-size: 5.5rem; margin-bottom:10px;">🎉</div>
+                    <div class="status-msg">합격을 축하합니다!</div>
                     <div class="dept-badge">${data.dept} 합격</div>
                     <div class="info-text">
-                        <b>합격자 소집일 안내</b><br>
-                        2027.12.11.(금) 14:00<br>
-                        본교 강당으로 소집 바랍니다.
+                        <b>합격자 소집일</b><br>
+                        2027.12.11.(금) 14:00
                     </div>
                 `;
             } else {
+                // 불합격 시: 애니메이션 종이비행기
                 content.innerHTML = `
-                    <div class="fly-icon">✈️```html
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2027 신입생 합격자 조회 🎈</title>
-    <link href="[https://fonts.googleapis.com/css2?family=Nanum+Square+Round:wght@400;700;800&display=swap](https://fonts.googleapis.com/css2?family=Nanum+Square+Round:wght@400;700;800&display=swap)" rel="stylesheet">
-    <style>
-        :root {
-            --main-purple: #9c88ff;
-            --pass-green: #44bd32;
-            --confirm-yellow: #ffc233;
-            --bg-blue: #8faefc;
-        }
-
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Nanum Square Round', sans-serif;
-            background-color: var(--bg-blue);
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background: #f8faff;
-            width: 90%; max-width: 420px;
-            padding: 50px 30px; border-radius: 50px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            text-align: center;
-        }
-
-        h1 { color: var(--main-purple); font-weight: 800; margin-bottom: 30px; font-size: 1.8rem; }
-        
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-size: 0.9rem; font-weight: 700; color: #666; margin-left: 10px; }
-        input {
-            width: 100%; padding: 18px; margin-top: 8px;
-            border: 2px solid #eee; border-radius: 25px;
-            box-sizing: border-box; font-size: 1rem; outline: none;
-            transition: 0.3s;
-        }
-        input:focus { border-color: var(--main-purple); background-color: #fff; }
-
-        .btn {
-            width: 100%; padding: 20px; border: none; border-radius: 25px;
-            font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.2s;
-        }
-        .check-btn { background: var(--main-purple); color: white; margin-top: 10px; }
-        .confirm-btn { background: var(--confirm-yellow); color: white; margin-top: 30px; box-shadow: 0 5px 15px rgba(255,194,51,0.3); }
-
-        #result-section { display: none; animation: fadeIn 0.5s; }
-        .emoji-img { width: 120px; margin-bottom: 10px; }
-        .status-msg { font-size: 1.5rem; font-weight: 800; color: #333; margin: 15px 0; line-height: 1.4; }
-        .dept-badge {
-            display: inline-block; padding: 12px 35px;
-            background: var(--pass-green); color: white;
-            border-radius: 50px; font-weight: 700; font-size: 1.2rem; margin: 10px 0;
-        }
-        .info-text { color: #888; font-size: 0.9rem; margin-top: 20px; line-height: 1.5; }
-        .loading { display: none; color: var(--main-purple); font-weight: 700; margin-top: 15px; }
-
-        /* 애니메이션 */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fly {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(8deg); }
-        }
-        .fly-icon { display: inline-block; font-size: 5.5rem; margin-bottom: 10px; animation: fly 2.5s infinite ease-in-out; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div id="login-section">
-        <h1>합격자 조회</h1>
-        <div class="input-group">
-            <label>이름</label>
-            <input type="text" id="userName" placeholder="이름을 입력하세요">
-        </div>
-        <div class="input-group">
-            <label>생년월일 (8자리)</label>
-            <input type="number" id="userBirth" placeholder="예: 20110520" oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);">
-        </div>
-        <button class="btn check-btn" onclick="checkPass()">결과 확인하기 🚀</button>
-        <div id="loader" class="loading">정보를 확인하고 있습니다... ✨</div>
-    </div>
-
-    <div id="result-section">
-        <div id="result-content"></div>
-        <button class="btn confirm-btn" onclick="location.reload()">확인 완료</button>
-    </div>
-</div>
-
-<script>
-    // 배포한 구글 앱스 스크립트 URL
-    const SCRIPT_URL = "[https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec](https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec)";
-
-    async function checkPass() {
-        const name = document.getElementById('userName').value.trim();
-        const birth = document.getElementById('userBirth').value.trim();
-        const loader = document.getElementById('loader');
-
-        if(!name || birth.length !== 8) {
-            alert("이름과 생년월일 8자리를 입력해주세요! 😊");
-            return;
-        }
-
-        loader.style.display = "block";
-
-        try {
-            const response = await fetch(SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify({ name, birth })
-            });
-            const data = await response.json();
-            displayResult(data, name);
-        } catch (error) {
-            alert("연결 오류가 발생했습니다. 다시 시도해주세요.");
-        } finally {
-            loader.style.display = "none";
-        }
-    }
-
-    function displayResult(data, name) {
-        const resSection = document.getElementById('result-section');
-        const loginSection = document.getElementById('login-section');
-        const content = document.getElementById('result-content');
-        
-        loginSection.style.display = "none";
-        resSection.style.display = "block";
-
-        if(data.status === "success") {
-            if(data.pass === true) {
-                // 합격 시: 터진 축포 이미지
-                const imageUrl = "[https://cdn-icons-png.flaticon.com/512/3138/3138596.png](https://cdn-icons-png.flaticon.com/512/3138/3138596.png)"; 
-                
-                content.innerHTML = `
-                    <img src="${imageUrl}" class="emoji-img" alt="축하">
-                    <div class="status-msg">합격을 축하합니다!</div>
-                    <div class="dept-badge">${data.dept} 합격</div>
-                    <div class="info-text">
-                        <b>합격자 소집일</b><br>
-                        2027.12.11.(금) 14:00
-                    </div>
-                `;
-            } else {
-                // 불합격 시: 애니메이션이 적용된 종이비행기
-                content.innerHTML = `
-                    <div class="fly-icon">✈️</div>
-                    <div class="status-msg">아쉽지만 이번 전형에서는<br>함께하지 못하게 되었습니다.</div>
-                    <p style="line-height:1.7; color:#666; font-size:0.95rem;">
-                        ${name}님이 보여주신 노력에 진심으로 감사드립니다.<br>
-                        더 넓은 세상으로 날아오를 당신의 앞날을<br>
-                        언제나 응원하겠습니다.
-                    p>
-                `;
-            }
-        } else {
-            // 정보 없음
-            content.innerHTML = `
-                <div style="font-size: 5rem; margin-bottom:15px;">🔍</div>
-                <div class="status-msg">정보를 찾을 수 없습니다</div>
-                <p>이름과 생년월일을<br>정확히 확인해주세요.</p>
-            `;
-        }
-    }
+                    <div class="fly-icon">✈️</div>
+                    <div class="status-msg">아쉽지만 이번 전형에서는<br>함께하지 못하게 되었습니다.</div>
+                    <p style="line-height:1.7; color:#666; font-size:0.95rem;">
+                        ${name}님이 보여주신 노력에 진심으로 감사드립니다.<br>
+                        더 넓은 세상으로 날아오를 당신의 앞날을<br>
+                        언제나 응원하겠습니다.
+                    </p>
+                `;
+            }
+        } else {
+            content.innerHTML = `
+                <div style="font-size: 5rem; margin-bottom:15px;">🔍</div>
+                <div class="status-msg">정보를 찾을 수 없습니다</div>
+                <p>이름과 생년월일을 정확히 확인해주세요.</p>
+            `;
+        }
+    }
 </script>
 
 </body>
