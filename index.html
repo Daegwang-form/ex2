@@ -24,9 +24,19 @@
         .container {
             background: #f8faff;
             width: 90%; max-width: 420px;
-            padding: 50px 30px; border-radius: 50px;
+            padding: 40px 30px 50px 30px; border-radius: 50px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             text-align: center;
+        }
+
+        /* 로고 스타일: 가로형 로고에 맞춰 너비 조정 */
+        .school-logo {
+            width: 220px; /* 로고 크기가 적당하도록 조정 */
+            height: auto;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .school-label { color: var(--main-purple); font-weight: 700; font-size: 0.9rem; margin-bottom: 5px; display: block; }
@@ -70,8 +80,10 @@
 <body>
 
 <div class="container">
+    <img src="https://github.com/Daegwang-form/ex2/blob/main/%EC%82%AC%EC%9A%A9%ED%95%99%EA%B5%90%EB%A1%9C%EA%B3%A002.png?raw=true" alt="대광고등학교" class="school-logo">
+
     <div id="login-section">
-        <span class="school-label">대광고등학교</span>
+        <span class="school-label">2027학년도 신입생</span>
         <h1>합격자 조회</h1>
         <div class="input-group">
             <label>이름</label>
@@ -130,7 +142,6 @@
 
         if(data.status === "success") {
             if(data.pass === true) {
-                // 합격 시: 이모지 활용 (이미지 깨짐 방지)
                 content.innerHTML = `
                     <div style="font-size: 5.5rem; margin-bottom:10px;">🎉</div>
                     <div class="status-msg">합격을 축하합니다!</div>
@@ -138,11 +149,10 @@
                     <div class="info-text">
                         <b>합격자 소집일 안내</b><br>
                         2027.12.11.(금) 14:00<br>
-                        대광고등학교 상록관 3층
+                        본교 강당으로 소집 바랍니다.
                     </div>
                 `;
             } else {
-                // 불합격 시: 애니메이션 종이비행기
                 content.innerHTML = `
                     <div class="fly-icon">✈️</div>
                     <div class="status-msg">아쉽지만 이번 전형에서는<br>함께하지 못하게 되었습니다.</div>
