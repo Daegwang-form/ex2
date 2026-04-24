@@ -31,19 +31,19 @@
             overflow: hidden;
         }
 
-        /* [수정] 학교 로고 왼쪽 상단 배치 */
+        /* [수정] 학교 로고 크기 확대 및 여백 조정 */
         .school-logo {
-            width: 120px; /* 상단에 위치하므로 크기를 살짝 줄였습니다 */
+            width: 180px; /* 기존 120px에서 180px로 확대 */
             height: auto;
             position: absolute;
-            top: 25px;
-            left: 25px;
+            top: 20px; /* 로고가 커졌으므로 위쪽 여백 조절 */
+            left: 20px; /* 로고가 커졌으므로 왼쪽 여백 조절 */
             display: block;
         }
 
-        /* 로고가 위로 갔으므로 제목 여백 조정 */
+        /* [수정] 로고가 커졌으므로 제목 여백 확보 */
         .header-group {
-            margin-top: 50px; /* 로고 공간 확보 */
+            margin-top: 65px; /* 기존 50px에서 65px로 확대 */
             margin-bottom: 35px;
         }
 
@@ -153,7 +153,7 @@
         if(data.status === "success") {
             if(data.pass === true) {
                 content.innerHTML = `
-                    <div style="font-size: 5.5rem; margin-bottom:10px; margin-top: 40px;">🎉</div>
+                    <div style="font-size: 5.5rem; margin-bottom:10px; margin-top: 55px;">🎉</div>
                     <div class="status-msg">합격을 축하합니다!</div>
                     <div class="dept-badge">${data.dept} 합격</div>
                     <div class="info-text">
@@ -164,7 +164,7 @@
                 `;
             } else {
                 content.innerHTML = `
-                    <div class="fly-icon" style="margin-top: 40px;">✈️</div>
+                    <div class="fly-icon" style="margin-top: 55px;">✈️</div>
                     <div class="status-msg">아쉽지만 이번 전형에서는<br>함께하지 못하게 되었습니다.</div>
                     <p style="line-height:1.7; color:#666; font-size:0.95rem;">
                         ${name}님이 보여주신 노력에 진심으로 감사드립니다.<br>
@@ -175,7 +175,7 @@
             }
         } else {
             content.innerHTML = `
-                <div style="font-size: 5rem; margin-bottom:15px; margin-top: 40px;">🔍</div>
+                <div style="font-size: 5rem; margin-bottom:15px; margin-top: 55px;">🔍</div>
                 <div class="status-msg">정보를 찾을 수 없습니다</div>
                 <p style="color:#888;">이름과 생년월일 8자리를<br>다시 확인해주세요.</p>
             `;
