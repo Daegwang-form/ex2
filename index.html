@@ -55,9 +55,7 @@
         }
 
         button:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(156, 136, 255, 0.4); }
-        button:active { transform: translateY(0); }
 
-        /* 결과 창 애니메이션 */
         #result-section { display: none; animation: slideUp 0.5s ease-out; }
         .result-card { padding: 20px; border-radius: 30px; }
         .emoji { font-size: 5rem; margin-bottom: 20px; display: block; }
@@ -89,20 +87,18 @@
             <input type="text" id="userName" placeholder="성함을 입력해주세요">
         </div>
         <div class="input-group">
-            <label>생년월일 (6자리)</label>
-            <input type="number" id="userBirth" placeholder="예: 110302">
+            <label>생년월일 (8자리)</label>
+            <input type="number" id="userBirth" placeholder="예: 20110302" oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);">
         </div>
         
         <button onclick="checkPass()">결과 확인하기 🚀</button>
         <div id="loader" class="loading">꿈을 찾는 중... ✨</div>
     </div>
 
-    <div id="result-section">
-        </div>
+    <div id="result-section"></div>
 </div>
 
 <script>
-    // 전달해주신 최종 배포 URL 적용
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec";
 
     async function checkPass() {
@@ -110,8 +106,9 @@
         const birth = document.getElementById('userBirth').value.trim();
         const loader = document.getElementById('loader');
 
-        if(!name || !birth) {
-            alert("이름과 생년월일을 정확히 입력해줘! 😊");
+        // 8자리 입력 체크 로직 추가
+        if(!name || birth.length !== 8) {
+            alert("이름과 생년월일 8자리를 정확히 입력해줘! 😊");
             return;
         }
 
@@ -125,7 +122,7 @@
             const data = await response.json();
             displayResult(data, name);
         } catch (error) {
-            alert("잠시 후 다시 시도해줘! (네트워크 오류)");
+            alert("서버와 연결할 수 없어. 다시 시도해줘!");
         } finally {
             loader.style.display = "none";
         }
@@ -144,9 +141,9 @@
                     <div class="result-card">
                         <span class="emoji">🎉</span>
                         <h2 style="font-weight:800; margin-bottom:5px;">축하해, ${name}아!</h2>
-                        <p style="line-height:1.6;">너의 소중한 노력이 결실을 맺었어.<br>우리 학교에서 너의 꿈을 펼쳐봐!</p>
+                        <p style="line-height:1.6;">너의 소중한 노력이 결실을 맺었어.<br>우리 학교의 주인공이 된 걸 환영해!</p>
                         <div class="dept-tag">${data.dept} 합격</div>
-                        <p style="font-size:0.85rem; color:#888;">입학 관련 공지사항을 꼭 확인해줘!</p>
+                        <p style="font-size:0.85rem; color:#888;">입학 공지사항을 꼭 확인해줘!</p>
                         <button onclick="location.reload()" style="background:#fbc531; margin-top:25px;">확인 완료</button>
                     </div>`;
             } else {
@@ -155,7 +152,7 @@
                         <span class="emoji">🌱</span>
                         <h2 style="font-weight:800; margin-bottom:5px;">수고했어, ${name}아.</h2>
                         <p style="line-height:1.6;">이번 결과가 너의 전부는 아니야.<br>더 밝게 빛날 너의 미래를 언제나 응원할게.</p>
-                        <p style="color:var(--soft-blue); font-weight:700; margin-top:15px;">너는 존재만으로도 소중해!</p>
+                        <p style="color:var(--soft-blue); font-weight:700; margin-top:15px;">너는 존재만으로도 충분히 멋져!</p>
                         <button onclick="location.reload()" style="background:#718093; margin-top:25px;">돌아가기</button>
                     </div>`;
             }
@@ -163,7 +160,7 @@
             resSection.innerHTML = `
                 <span class="emoji">🔍</span>
                 <h2 style="font-weight:800;">정보를 찾을 수 없어</h2>
-                <p>입력한 이름과 생년월일이<br>명단에 있는지 다시 확인해줄래?</p>
+                <p>입력한 이름과 생년월일 8자리가<br>정확한지 다시 한번 확인해줘!</p>
                 <button onclick="location.reload()" style="background:#718093; margin-top:20px;">다시 입력하기</button>`;
         }
     }
