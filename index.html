@@ -11,7 +11,6 @@
             --pass-green: #44bd32;
             --confirm-yellow: #ffc233;
             --bg-blue: #8faefc;
-            --text-grey: #666;
         }
 
         body {
@@ -33,7 +32,7 @@
         h1 { color: var(--main-purple); font-weight: 800; margin-bottom: 30px; font-size: 1.8rem; }
         
         .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-size: 0.9rem; font-weight: 700; color: #555; margin-left: 10px; }
+        label { font-size: 0.9rem; font-weight: 700; color: #666; margin-left: 10px; }
         input {
             width: 100%; padding: 18px; margin-top: 8px;
             border: 2px solid #eee; border-radius: 25px;
@@ -50,7 +49,7 @@
         .confirm-btn { background: var(--confirm-yellow); color: white; margin-top: 30px; box-shadow: 0 5px 15px rgba(255,194,51,0.3); }
 
         #result-section { display: none; animation: fadeIn 0.5s; }
-        .emoji-img { width: 100px; margin-bottom: 10px; }
+        .emoji-img { width: 120px; margin-bottom: 10px; }
         .status-msg { font-size: 1.5rem; font-weight: 800; color: #333; margin: 15px 0; line-height: 1.4; }
         .dept-badge {
             display: inline-block; padding: 12px 35px;
@@ -60,7 +59,13 @@
         .info-text { color: #888; font-size: 0.9rem; margin-top: 20px; line-height: 1.5; }
         .loading { display: none; color: var(--main-purple); font-weight: 700; margin-top: 15px; }
 
+        /* 애니메이션 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fly {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        .fly-icon { display: inline-block; font-size: 5.5rem; margin-bottom: 10px; animation: fly 2.5s infinite ease-in-out; }
     </style>
 </head>
 <body>
@@ -87,7 +92,7 @@
 </div>
 
 <script>
-    // 배포한 구글 웹 앱 URL을 여기에 입력하세요
+    // 배포한 구글 앱스 스크립트 URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec";
 
     async function checkPass() {
@@ -96,7 +101,7 @@
         const loader = document.getElementById('loader');
 
         if(!name || birth.length !== 8) {
-            alert("이름과 생년월일 8자리를 모두 입력해주세요! 😊");
+            alert("이름과 생년월일 8자리를 입력해주세요! 😊");
             return;
         }
 
@@ -110,7 +115,7 @@
             const data = await response.json();
             displayResult(data, name);
         } catch (error) {
-            alert("연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            alert("연결 오류가 발생했습니다. 다시 시도해주세요.");
         } finally {
             loader.style.display = "none";
         }
@@ -126,9 +131,12 @@
 
         if(data.status === "success") {
             if(data.pass === true) {
-                // 합격 시: 폭죽 아이콘 + 소집일 안내
+                // 합격 시: 모바일 재생 보장을 위해 URL 뒤에 랜덤 타임스탬프 추가
+                const randomId = new Date().getTime();
+                const gifUrl = "https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.gif";
+                
                 content.innerHTML = `
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.gif" class="emoji-img" alt="축하">
+                    <img src="${gifUrl}?t=${randomId}" class="emoji-img" alt="축하">
                     <div class="status-msg">합격을 축하합니다!</div>
                     <div class="dept-badge">${data.dept} 합격</div>
                     <div class="info-text">
@@ -137,14 +145,14 @@
                     </div>
                 `;
             } else {
-                // 불합격 시: 종이비행기 아이콘 + 따뜻한 위로
+                // 불합격 시: 애니메이션이 적용된 종이비행기
                 content.innerHTML = `
-                    <div style="font-size: 5.5rem; margin-bottom:10px;">✈️</div>
+                    <div class="fly-icon">✈️</div>
                     <div class="status-msg">아쉽지만 이번 전형에서는<br>함께하지 못하게 되었습니다.</div>
-                    <p style="line-height:1.7; color:var(--text-grey); font-size:0.95rem;">
-                        ${name}님이 보여주신 열정과 노력에 감사드립니다.<br>
-                        이번 결과가 끝이 아니기에, 더 넓은 세상으로<br>
-                        날아오를 당신의 앞날을 진심으로 응원합니다.
+                    <p style="line-height:1.7; color:#666; font-size:0.95rem;">
+                        ${name}님이 보여주신 노력에 진심으로 감사드립니다.<br>
+                        더 넓은 세상으로 날아오를 당신의 앞날을<br>
+                        언제나 응원하겠습니다.
                     </p>
                 `;
             }
@@ -153,7 +161,7 @@
             content.innerHTML = `
                 <div style="font-size: 5rem; margin-bottom:15px;">🔍</div>
                 <div class="status-msg">정보를 찾을 수 없습니다</div>
-                <p style="color:#888;">입력하신 이름과 생년월일이<br>명단과 일치하는지 확인해주세요.</p>
+                <p>입력하신 이름과 생년월일이<br>명단과 일치하는지 확인해주세요.</p>
             `;
         }
     }
