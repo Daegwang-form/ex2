@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대광고등학교 2027 신입생 합격자 조회 🏫</title>
+    <title>2027 신입생 합격자 조회 🎈</title>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Square+Round:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,8 +11,6 @@
             --pass-green: #44bd32;
             --confirm-yellow: #ffc233;
             --bg-blue: #8faefc;
-            --text-dark: #333;
-            --text-grey: #666;
         }
 
         body {
@@ -26,28 +24,20 @@
         .container {
             background: #f8faff;
             width: 90%; max-width: 420px;
-            padding: 40px 30px 50px 30px; 
-            border-radius: 50px;
+            padding: 50px 30px; border-radius: 50px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             text-align: center;
         }
 
-        /* [핵심] 대광고 공식 로고 스타일 (image_5.png 기반) */
-        .school-logo {
-            width: 80px; 
-            height: auto;
-            margin-bottom: 15px; 
-        }
-
-        h1 { color: var(--main-purple); font-weight: 800; margin-bottom: 5px; font-size: 1.8rem; margin-top: 0; }
-        .sub-title { color: var(--text-grey); font-size: 1rem; margin-bottom: 35px; }
+        .school-label { color: var(--main-purple); font-weight: 700; font-size: 0.9rem; margin-bottom: 5px; display: block; }
+        h1 { color: var(--main-purple); font-weight: 800; margin-top: 0; margin-bottom: 35px; font-size: 1.8rem; }
         
         .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); margin-left: 10px; }
+        label { font-size: 0.9rem; font-weight: 700; color: #666; margin-left: 10px; }
         input {
             width: 100%; padding: 18px; margin-top: 8px;
             border: 2px solid #eee; border-radius: 25px;
-            box-sizing: border-box; font-size: 1.1rem; outline: none;
+            box-sizing: border-box; font-size: 1rem; outline: none;
             transition: 0.3s;
         }
         input:focus { border-color: var(--main-purple); background-color: #fff; }
@@ -60,14 +50,13 @@
         .confirm-btn { background: var(--confirm-yellow); color: white; margin-top: 30px; box-shadow: 0 5px 15px rgba(255,194,51,0.3); }
 
         #result-section { display: none; animation: fadeIn 0.5s; }
-        .result-icon { width: 130px; height: auto; margin-bottom: 10px; }
-        .status-msg { font-size: 1.6rem; font-weight: 800; color: var(--text-dark); margin: 15px 0; line-height: 1.4; }
+        .status-msg { font-size: 1.5rem; font-weight: 800; color: #333; margin: 15px 0; line-height: 1.4; }
         .dept-badge {
             display: inline-block; padding: 12px 35px;
             background: var(--pass-green); color: white;
             border-radius: 50px; font-weight: 700; font-size: 1.2rem; margin: 10px 0;
         }
-        .info-text { color: var(--text-grey); font-size: 0.95rem; margin-top: 20px; line-height: 1.5; }
+        .info-text { color: #888; font-size: 0.95rem; margin-top: 20px; line-height: 1.6; }
         .loading { display: none; color: var(--main-purple); font-weight: 700; margin-top: 15px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -81,12 +70,9 @@
 <body>
 
 <div class="container">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXdBAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAEQSURBVHja7NwhAQAACAOx/YvP2NggNpsM2AAAAABJRU5ErkJggg==" alt="대광고등학교 로고" class="school-logo">
-
     <div id="login-section">
+        <span class="school-label">대광고등학교</span>
         <h1>합격자 조회</h1>
-        <p class="sub-title">대광고등학교 2027학년도 신입생모집</p>
-        
         <div class="input-group">
             <label>이름</label>
             <input type="text" id="userName" placeholder="이름을 입력하세요">
@@ -106,7 +92,6 @@
 </div>
 
 <script>
-    // 배포한 구글 앱스 스크립트 URL을 여기에 입력하세요 (필수)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec";
 
     async function checkPass() {
@@ -115,7 +100,7 @@
         const loader = document.getElementById('loader');
 
         if(!name || birth.length !== 8) {
-            alert("이름과 생년월일 8자리를 정확히 입력해주세요! 😊");
+            alert("이름과 생년월일 8자리를 입력해주세요! 😊");
             return;
         }
 
@@ -145,14 +130,10 @@
 
         if(data.status === "success") {
             if(data.pass === true) {
-                // [합격 시] 고화질 정지 이미지(PNG) 사용 (base64 인코딩)
-                const staticImageUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAACMCAYAAAC354K9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAEQSURBVHja7NwhAQAACAOx/YvP2NggNpsM2AAAAABJRU5ErkJggg=="; 
-                
+                // 합격 시: 이모지 활용 (이미지 깨짐 방지)
                 content.innerHTML = `
-                    <div style="height: 140px; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
-                        <img src="${staticImageUrl}" class="result-icon" alt="축하 폭죽">
-                    </div>
-                    <div class="status-msg">합격을 축하합니다!🎉</div>
+                    <div style="font-size: 5.5rem; margin-bottom:10px;">🎉</div>
+                    <div class="status-msg">합격을 축하합니다!</div>
                     <div class="dept-badge">${data.dept} 합격</div>
                     <div class="info-text">
                         <b>합격자 소집일 안내</b><br>
@@ -161,23 +142,22 @@
                     </div>
                 `;
             } else {
-                // [불합격 시] 애니메이션 종이비행기
+                // 불합격 시: 애니메이션 종이비행기
                 content.innerHTML = `
                     <div class="fly-icon">✈️</div>
                     <div class="status-msg">아쉽지만 이번 전형에서는<br>함께하지 못하게 되었습니다.</div>
-                    <p style="line-height:1.7; color:var(--text-grey); font-size:1rem;">
+                    <p style="line-height:1.7; color:#666; font-size:0.95rem;">
                         ${name}님이 보여주신 노력에 진심으로 감사드립니다.<br>
-                        이번 결과가 끝이 아니기에, 더 넓은 세상으로<br>
-                        날아오를 당신의 앞날을 언제나 응원하겠습니다.
+                        더 넓은 세상으로 날아오를 당신의 앞날을<br>
+                        언제나 응원하겠습니다.
                     </p>
                 `;
             }
         } else {
-            // [정보 불일치]
             content.innerHTML = `
                 <div style="font-size: 5rem; margin-bottom:15px;">🔍</div>
                 <div class="status-msg">정보를 찾을 수 없습니다</div>
-                <p style="color:var(--text-grey); font-size:1rem;">이름과 생년월일 8자리를<br>다시 한번 확인해주세요.</p>
+                <p style="color:#888;">이름과 생년월일 8자리를<br>다시 확인해주세요.</p>
             `;
         }
     }
