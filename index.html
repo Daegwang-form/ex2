@@ -11,6 +11,7 @@
             --pass-gold: #fbc531;
             --soft-blue: #74b9ff;
             --text-dark: #2f3640;
+            --fail-grey: #a4b0be;
         }
 
         body {
@@ -50,14 +51,14 @@
             background: var(--main-purple); color: white;
             border: none; border-radius: 20px;
             font-size: 1.15rem; font-weight: 800; cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s;
             box-shadow: 0 8px 20px rgba(156, 136, 255, 0.3);
         }
 
         button:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(156, 136, 255, 0.4); }
 
         #result-section { display: none; animation: slideUp 0.5s ease-out; }
-        .result-card { padding: 20px; border-radius: 30px; }
+        .result-card { padding: 10px; border-radius: 30px; }
         .emoji { font-size: 5rem; margin-bottom: 20px; display: block; }
         
         .dept-tag {
@@ -84,21 +85,22 @@
         
         <div class="input-group">
             <label>이름</label>
-            <input type="text" id="userName" placeholder="성함을 입력해주세요">
+            <input type="text" id="userName" placeholder="이름을 입력해주세요">
         </div>
         <div class="input-group">
             <label>생년월일 (8자리)</label>
-            <input type="number" id="userBirth" placeholder="예: 20110302" oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);">
+            <input type="number" id="userBirth" placeholder="예: 20110101" oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);">
         </div>
         
-        <button onclick="checkPass()">합격 조회🚀</button>
-        <div id="loader" class="loading">꿈을 찾는 중... ✨</div>
+        <button onclick="checkPass()">결과 확인하기 🚀</button>
+        <div id="loader" class="loading">정보를 확인하고 있어... ✨</div>
     </div>
 
     <div id="result-section"></div>
 </div>
 
 <script>
+    // 배포하신 Google Apps Script URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec";
 
     async function checkPass() {
@@ -106,7 +108,6 @@
         const birth = document.getElementById('userBirth').value.trim();
         const loader = document.getElementById('loader');
 
-        // 8자리 입력 체크 로직 추가
         if(!name || birth.length !== 8) {
             alert("이름과 생년월일 8자리를 정확히 입력해줘! 😊");
             return;
@@ -122,7 +123,7 @@
             const data = await response.json();
             displayResult(data, name);
         } catch (error) {
-            alert("서버와 연결할 수 없어. 다시 시도해줘!");
+            alert("서버 연결에 문제가 생겼어. 다시 시도해줘!");
         } finally {
             loader.style.display = "none";
         }
@@ -136,31 +137,35 @@
         resSection.style.display = "block";
 
         if(data.status === "success") {
+            // DB의 C열이 '합격'인 경우
             if(data.pass) {
                 resSection.innerHTML = `
                     <div class="result-card">
                         <span class="emoji">🎉</span>
-                        <h2 style="font-weight:800; margin-bottom:5px;">합격을 축하합니다!</h2>
+                        <h2 style="font-weight:800; margin-bottom:5px;">축하해, ${name}아!</h2>
+                        <p style="line-height:1.6;">너의 소중한 노력이 결실을 맺었어.<br>우리 학교의 주인공이 된 걸 환영해!</p>
                         <div class="dept-tag">${data.dept} 합격</div>
-                        <p style="font-size:0.85rem; color:#888;">합격자 소집일 : 2027년 12월 11(금) 14시</p>
-                        <button onclick="location.reload()" style="background:#fbc531; margin-top:25px;">확인 완료</button>
+                        <p style="font-size:0.85rem; color:#888;">입학 관련 공지를 꼭 확인해줘!</p>
+                        <button onclick="location.reload()" style="background:var(--pass-gold); margin-top:25px;">확인 완료</button>
                     </div>`;
-            } else {
+            } 
+            // DB의 C열이 '불합격'인 경우
+            else {
                 resSection.innerHTML = `
                     <div class="result-card">
                         <span class="emoji">🌱</span>
                         <h2 style="font-weight:800; margin-bottom:5px;">수고했어, ${name}아.</h2>
-                        <p style="line-height:1.6;">이번 결과가 너의 전부는 아니야.<br>더 밝게 빛날 너의 미래를 언제나 응원할게.</p>
-                        <p style="color:var(--soft-blue); font-weight:700; margin-top:15px;">너는 존재만으로도 충분히 멋져!</p>
-                        <button onclick="location.reload()" style="background:#718093; margin-top:25px;">돌아가기</button>
+                        <p style="line-height:1.6;">이번 결과가 너의 전부는 아니야.<br>더 밝게 빛날 너의 미래를 항상 응원할게.</p>
+                        <p style="color:var(--soft-blue); font-weight:700; margin-top:15px;">너는 충분히 멋진 사람이야!</p>
+                        <button onclick="location.reload()" style="background:var(--fail-grey); margin-top:25px;">돌아가기</button>
                     </div>`;
             }
         } else {
             resSection.innerHTML = `
                 <span class="emoji">🔍</span>
                 <h2 style="font-weight:800;">정보를 찾을 수 없어</h2>
-                <p>입력한 이름과 생년월일 8자리가<br>정확한지 다시 한번 확인해줘!</p>
-                <button onclick="location.reload()" style="background:#718093; margin-top:20px;">다시 입력하기</button>`;
+                <p>입력한 이름과 생년월일 8자리가<br>명단과 일치하는지 확인해줄래?</p>
+                <button onclick="location.reload()" style="background:var(--fail-grey); margin-top:20px;">다시 입력하기</button>`;
         }
     }
 </script>
