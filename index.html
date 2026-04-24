@@ -8,100 +8,112 @@
     <style>
         :root {
             --main-purple: #9c88ff;
-            --soft-pink: #ffdae0;
-            --pass-color: #fbc531;
-            --fail-color: #dcdde1;
+            --pass-gold: #fbc531;
+            --soft-blue: #74b9ff;
+            --text-dark: #2f3640;
         }
 
         body {
             margin: 0; padding: 0;
             font-family: 'Nanum Square Round', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #a29bfe 0%, #74b9ff 100%);
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; color: var(--text-dark);
         }
 
         .container {
-            background: white; width: 90%; max-width: 420px;
-            padding: 40px 25px; border-radius: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            width: 90%; max-width: 400px;
+            padding: 50px 30px; border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             text-align: center;
+            backdrop-filter: blur(10px);
         }
 
-        h1 { color: var(--main-purple); font-weight: 800; font-size: 1.6rem; margin-bottom: 5px; }
-        .sub-title { font-size: 0.9rem; color: #888; margin-bottom: 30px; }
+        h1 { color: var(--main-purple); font-weight: 800; font-size: 1.7rem; margin-bottom: 10px; }
+        .sub-title { font-size: 0.95rem; color: #7f8c8d; margin-bottom: 35px; }
 
-        .input-box { margin-bottom: 15px; text-align: left; }
-        label { font-size: 0.85rem; font-weight: 700; color: #555; margin-left: 10px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { font-size: 0.9rem; font-weight: 700; color: #636e72; margin-left: 8px; }
         
         input {
-            width: 100%; padding: 16px; margin-top: 5px;
-            border: 2px solid #f0f0f0; border-radius: 20px;
+            width: 100%; padding: 16px; margin-top: 8px;
+            border: 2px solid #eee; border-radius: 20px;
             box-sizing: border-box; font-size: 1rem;
-            transition: 0.3s;
+            transition: all 0.3s; background: #f9f9f9;
         }
 
-        input:focus { border-color: var(--main-purple); outline: none; background: #fafaff; }
+        input:focus { border-color: var(--main-purple); outline: none; background: #fff; box-shadow: 0 0 10px rgba(156, 136, 255, 0.2); }
 
         button {
-            width: 100%; padding: 18px; margin-top: 10px;
+            width: 100%; padding: 18px; margin-top: 15px;
             background: var(--main-purple); color: white;
             border: none; border-radius: 20px;
-            font-size: 1.1rem; font-weight: 800; cursor: pointer;
-            box-shadow: 0 8px 15px rgba(156, 136, 255, 0.3);
+            font-size: 1.15rem; font-weight: 800; cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(156, 136, 255, 0.3);
         }
 
-        /* 결과 화면 디자인 */
-        #result-section { display: none; animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .result-card { padding: 30px 20px; border-radius: 30px; }
-        .pass-card { background: #fffdf2; border: 3px solid var(--pass-color); }
-        .fail-card { background: #f9f9f9; border: 3px solid #eee; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(156, 136, 255, 0.4); }
+        button:active { transform: translateY(0); }
+
+        /* 결과 창 애니메이션 */
+        #result-section { display: none; animation: slideUp 0.5s ease-out; }
+        .result-card { padding: 20px; border-radius: 30px; }
+        .emoji { font-size: 5rem; margin-bottom: 20px; display: block; }
         
-        .emoji { font-size: 4.5rem; margin-bottom: 15px; }
-        .main-msg { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; }
-        .dept-box { 
-            display: inline-block; padding: 8px 20px; 
-            background: #44bd32; color: white; 
-            border-radius: 50px; font-weight: 700; margin: 15px 0;
+        .dept-tag {
+            display: inline-block; padding: 10px 25px;
+            background: linear-gradient(to right, #44bd32, #26de81);
+            color: white; border-radius: 50px;
+            font-weight: 800; font-size: 1.1rem; margin: 20px 0;
         }
 
-        @keyframes pop { from { opacity:0; transform: scale(0.8); } to { opacity:1; transform: scale(1); } }
-        .loading { display: none; color: #9c88ff; font-weight: 700; margin-top: 20px; }
+        .loading { display: none; margin-top: 20px; font-weight: 700; color: var(--main-purple); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="login-section">
-        <h1>Welcome! 🏫</h1>
-        <p class="sub-title">2027 신입생 합격 조회를 시작합니다</p>
+        <h1>Hello, 2027! 🏫</h1>
+        <p class="sub-title">설레는 합격의 순간을 확인해보세요</p>
         
-        <div class="input-box">
-            <label>성명</label>
-            <input type="text" id="userName" placeholder="이름을 입력해줘">
+        <div class="input-group">
+            <label>이름</label>
+            <input type="text" id="userName" placeholder="성함을 입력해주세요">
         </div>
-        <div class="input-box">
+        <div class="input-group">
             <label>생년월일 (6자리)</label>
-            <input type="number" id="userBirth" placeholder="예: 110520">
+            <input type="number" id="userBirth" placeholder="예: 110302">
         </div>
         
         <button onclick="checkPass()">결과 확인하기 🚀</button>
-        <div id="loader" class="loading">정보를 불러오는 중... ✨</div>
+        <div id="loader" class="loading">꿈을 찾는 중... ✨</div>
     </div>
 
-    <div id="result-section"></div>
+    <div id="result-section">
+        </div>
 </div>
 
 <script>
-    // ⚠️ 여기에 구글 앱스 스크립트에서 배포한 URL을 붙여넣으세요!
-    const SCRIPT_URL = "여기에_웹_앱_URL을_복사하세요";
+    // 전달해주신 최종 배포 URL 적용
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec";
 
     async function checkPass() {
         const name = document.getElementById('userName').value.trim();
         const birth = document.getElementById('userBirth').value.trim();
         const loader = document.getElementById('loader');
 
-        if(!name || !birth) return alert("정보를 모두 입력해줘! 😊");
+        if(!name || !birth) {
+            alert("이름과 생년월일을 정확히 입력해줘! 😊");
+            return;
+        }
 
         loader.style.display = "block";
 
@@ -111,49 +123,48 @@
                 body: JSON.stringify({ name, birth })
             });
             const data = await response.json();
-            
             displayResult(data, name);
         } catch (error) {
-            alert("서버 연결에 실패했어. 다시 시도해줘!");
+            alert("잠시 후 다시 시도해줘! (네트워크 오류)");
         } finally {
             loader.style.display = "none";
         }
     }
 
     function displayResult(data, name) {
-        const resDiv = document.getElementById('result-section');
-        const loginDiv = document.getElementById('login-section');
+        const resSection = document.getElementById('result-section');
+        const loginSection = document.getElementById('login-section');
         
-        loginDiv.style.display = "none";
-        resDiv.style.display = "block";
+        loginSection.style.display = "none";
+        resSection.style.display = "block";
 
         if(data.status === "success") {
             if(data.pass) {
-                resDiv.innerHTML = `
-                    <div class="result-card pass-card">
-                        <div class="emoji">🎊</div>
-                        <div class="main-msg">축하해, ${name}아!</div>
-                        <p>너의 노력이 빛을 발했어!<br>우리 학교의 일원이 된 걸 환영해.</p>
-                        <div class="dept-box">${data.dept} 합격</div>
-                        <p style="font-size:0.85rem; color:#888;">멋진 학교 생활을 함께 그리자! 🌈</p>
-                        <button onclick="location.reload()" style="background:#fbc531; margin-top:20px;">확인 완료</button>
+                resSection.innerHTML = `
+                    <div class="result-card">
+                        <span class="emoji">🎉</span>
+                        <h2 style="font-weight:800; margin-bottom:5px;">축하해, ${name}아!</h2>
+                        <p style="line-height:1.6;">너의 소중한 노력이 결실을 맺었어.<br>우리 학교에서 너의 꿈을 펼쳐봐!</p>
+                        <div class="dept-tag">${data.dept} 합격</div>
+                        <p style="font-size:0.85rem; color:#888;">입학 관련 공지사항을 꼭 확인해줘!</p>
+                        <button onclick="location.reload()" style="background:#fbc531; margin-top:25px;">확인 완료</button>
                     </div>`;
             } else {
-                resDiv.innerHTML = `
-                    <div class="result-card fail-card">
-                        <div class="emoji">🌱</div>
-                        <div class="main-msg">고생 많았어, ${name}아.</div>
-                        <p>이번 결과가 너의 전부는 아니야.<br>더 넓은 세상이 너를 기다리고 있을 거야.</p>
-                        <p style="color:#0097e6; font-weight:700;">너의 꿈을 언제나 응원할게!</p>
-                        <button onclick="location.reload()" style="background:#718093; margin-top:20px;">돌아가기</button>
+                resSection.innerHTML = `
+                    <div class="result-card">
+                        <span class="emoji">🌱</span>
+                        <h2 style="font-weight:800; margin-bottom:5px;">수고했어, ${name}아.</h2>
+                        <p style="line-height:1.6;">이번 결과가 너의 전부는 아니야.<br>더 밝게 빛날 너의 미래를 언제나 응원할게.</p>
+                        <p style="color:var(--soft-blue); font-weight:700; margin-top:15px;">너는 존재만으로도 소중해!</p>
+                        <button onclick="location.reload()" style="background:#718093; margin-top:25px;">돌아가기</button>
                     </div>`;
             }
         } else {
-            resDiv.innerHTML = `
-                <div class="emoji">🔍</div>
-                <h3>정보가 없어요!</h3>
-                <p>이름이나 생년월일이 틀린 것 같아.<br>다시 한번 확인해줄래?</p>
-                <button onclick="location.reload()" style="background:#718093;">다시 입력하기</button>`;
+            resSection.innerHTML = `
+                <span class="emoji">🔍</span>
+                <h2 style="font-weight:800;">정보를 찾을 수 없어</h2>
+                <p>입력한 이름과 생년월일이<br>명단에 있는지 다시 확인해줄래?</p>
+                <button onclick="location.reload()" style="background:#718093; margin-top:20px;">다시 입력하기</button>`;
         }
     }
 </script>
