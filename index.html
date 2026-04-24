@@ -49,7 +49,7 @@
         .confirm-btn { background: var(--confirm-yellow); color: white; margin-top: 30px; box-shadow: 0 5px 15px rgba(255,194,51,0.3); }
 
         #result-section { display: none; animation: fadeIn 0.5s; }
-        .emoji-img { width: 130px; margin-bottom: 10px; }
+        .emoji-img { width: 140px; height: auto; margin-bottom: 10px; }
         .status-msg { font-size: 1.5rem; font-weight: 800; color: #333; margin: 15px 0; line-height: 1.4; }
         .dept-badge {
             display: inline-block; padding: 12px 35px;
@@ -59,7 +59,6 @@
         .info-text { color: #888; font-size: 0.9rem; margin-top: 20px; line-height: 1.5; }
         .loading { display: none; color: var(--main-purple); font-weight: 700; margin-top: 15px; }
 
-        /* 애니메이션 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fly {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -92,7 +91,6 @@
 </div>
 
 <script>
-    // 배포한 구글 앱스 스크립트 URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw84oSwrAKNJaOjJvNNQyI4yDO0IXJefmlGglICabqD7kjsxVVEZsUVp5PCcnItJ-7VjQ/exec";
 
     async function checkPass() {
@@ -131,12 +129,14 @@
 
         if(data.status === "success") {
             if(data.pass === true) {
-                // [합격 시] 모바일에서도 축포 GIF가 강제 재생되도록 랜덤ID 추가
-                const randomId = new Date().getTime();
+                // 핵심 수정: 모바일 브라우저 캐시를 깨기 위해 타임스탬프를 매번 다르게 생성
+                const timestamp = Date.now();
                 const gifUrl = "https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.gif";
                 
                 content.innerHTML = `
-                    <img src="${gifUrl}?t=${randomId}" class="emoji-img" alt="축하">
+                    <div style="height: 140px; display: flex; justify-content: center; align-items: center;">
+                        <img src="${gifUrl}?t=${timestamp}" class="emoji-img" alt="축하 폭죽">
+                    </div>
                     <div class="status-msg">합격을 축하합니다!</div>
                     <div class="dept-badge">${data.dept} 합격</div>
                     <div class="info-text">
@@ -145,7 +145,6 @@
                     </div>
                 `;
             } else {
-                // [불합격 시] 애니메이션 종이비행기 + 따뜻한 위로
                 content.innerHTML = `
                     <div class="fly-icon">✈️</div>
                     <div class="status-msg">아쉽지만 이번 전형에서는<br>함께하지 못하게 되었습니다.</div>
@@ -157,11 +156,10 @@
                 `;
             }
         } else {
-            // [정보 불일치]
             content.innerHTML = `
                 <div style="font-size: 5rem; margin-bottom:15px;">🔍</div>
                 <div class="status-msg">정보를 찾을 수 없습니다</div>
-                <p style="color:#888;">이름과 생년월일 8자리를<br>다시 한번 확인해주세요.</p>
+                <p style="color:#888;">입력하신 이름과 생년월일 8자리를<br>다시 한번 확인해주세요.</p>
             `;
         }
     }
